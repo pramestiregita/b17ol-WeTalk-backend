@@ -10,12 +10,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(morgan('dev'))
 app.use(cors())
 
-app.get('/', (req, res) => {
-  res.status(200).send({
-    success: true,
-    message: 'Backend running'
-  })
-})
+const usersRoute = require('./routes/users')
+
+app.use('/user', usersRoute)
 
 app.listen(APP_PORT, () => {
   console.log(`App listening to port ${APP_PORT}`)

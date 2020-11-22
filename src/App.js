@@ -14,6 +14,9 @@ const usersRoute = require('./routes/users')
 
 app.use('/user', usersRoute)
 
+// provide static files
+app.use('/upload', express.static('assets/uploads/'))
+
 app.listen(APP_PORT, () => {
   console.log(`App listening to port ${APP_PORT}`)
 })

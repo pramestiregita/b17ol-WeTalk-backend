@@ -14,14 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Users.init({
-    name: {
-      type: DataTypes.STRING,
-      validate: {
-        notNull: 'Please insert your name!'
-      }
-    },
+    name: DataTypes.STRING,
     phoneNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notNull: 'Please insert your number!'
       }

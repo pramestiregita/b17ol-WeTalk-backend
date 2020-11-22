@@ -16,18 +16,21 @@ module.exports = (sequelize, DataTypes) => {
   Media.init({
     senderId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       validate: {
         notNull: 'Please insert senderId!'
       }
     },
     recivierId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       validate: {
         notNull: 'Please insert recivierId!'
       }
     },
     media: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notNull: 'Please insert a media!'
       }

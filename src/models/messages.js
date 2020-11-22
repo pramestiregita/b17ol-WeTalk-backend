@@ -16,18 +16,21 @@ module.exports = (sequelize, DataTypes) => {
   Messages.init({
     senderId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       validate: {
         notNull: 'Please inser senderId!'
       }
     },
     recivierId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       validate: {
         notNull: 'Please insert recivierId!'
       }
     },
     content: {
       type: DataTypes.TEXT,
+      allowNull: false,
       validate: {
         notNull: 'Please insert content!'
       }

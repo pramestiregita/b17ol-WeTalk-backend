@@ -34,7 +34,8 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: 'Please insert content!'
       }
-    }
+    },
+    lastMsg: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Messages'

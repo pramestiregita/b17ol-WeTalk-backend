@@ -34,13 +34,25 @@ module.exports = {
     try {
       const { id: userId } = req.user
 
-      const search = await Messages.findAll({
+      const count = await Messages.count({
         where: {
-          [Op.or]: [{ senderId: userId }, { recipientId: userId }]
+          [Op.or]: [{ senderId: userId }, { recipientId: userId }],
+          lastMsg: true
         }
       })
 
-      return response(res, 'List of message', { data: search })
+      const { pageInfo, offset } = paging(req, count)
+
+      const search = await Messages.findAll({
+        where: {
+          [Op.or]: [{ senderId: userId }, { recipientId: userId }],
+          lastMsg: true
+        },
+        limit: pageInfo.limit,
+        offset
+      })
+
+      return response(res, 'List of message', { data: search, pageInfo })
     } catch (e) {
       return response(res, e.message, {}, 500, false)
     }

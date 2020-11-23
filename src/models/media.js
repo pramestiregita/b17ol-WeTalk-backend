@@ -21,11 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         notNull: 'Please insert senderId!'
       }
     },
-    recivierId: {
+    recipientId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        notNull: 'Please insert recivierId!'
+        notNull: 'Please insert recipientId!'
       }
     },
     media: {

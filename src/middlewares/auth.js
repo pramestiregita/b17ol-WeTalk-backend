@@ -8,8 +8,10 @@ module.exports = (req, res, next) => {
 
   if (authorization && authorization.startsWith('Bearer ')) {
     const token = authorization.slice(7, authorization.length)
+
     try {
       const verify = jwt.verify(token, SECRET_KEY)
+
       if (verify) {
         req.user = verify
         next()

@@ -64,6 +64,7 @@ module.exports = {
           [Op.or]: [{ senderId: userId }, { recipientId: userId }],
           lastMsg: true
         },
+        order: [['createdAt', 'DESC']],
         limit: pageInfo.limit,
         offset
       })
@@ -78,33 +79,37 @@ module.exports = {
       const { id: userId } = req.user
       const { id: friendId } = req.params
 
-      const count = await Messages.count({
-        where: {
-          senderId: {
-            [Op.or]: [userId, friendId]
-          },
-          recipientId: {
-            [Op.or]: [userId, friendId]
+      if (userId === parseInt(friendId)) {
+        return response(res, 'Error', {}, 400, false)
+      } else {
+        const count = await Messages.count({
+          where: {
+            senderId: {
+              [Op.or]: [userId, friendId]
+            },
+            recipientId: {
+              [Op.or]: [userId, friendId]
+            }
           }
-        }
-      })
+        })
 
-      const { pageInfo, offset } = paging(req, count)
+        const { pageInfo, offset } = paging(req, count)
 
-      const search = await Messages.findAll({
-        where: {
-          senderId: {
-            [Op.or]: [userId, friendId]
+        const search = await Messages.findAll({
+          where: {
+            senderId: {
+              [Op.or]: [userId, friendId]
+            },
+            recipientId: {
+              [Op.or]: [userId, friendId]
+            }
           },
-          recipientId: {
-            [Op.or]: [userId, friendId]
-          }
-        },
-        limit: pageInfo.limit,
-        offset
-      })
+          limit: pageInfo.limit,
+          offset
+        })
 
-      return response(res, 'List of message', { data: search, pageInfo })
+        return response(res, 'List of message', { data: search, pageInfo })
+      }
     } catch (e) {
       return response(res, e.message, {}, 500, false)
     }

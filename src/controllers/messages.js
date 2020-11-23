@@ -1,8 +1,9 @@
 const { Messages, Users } = require('../models')
+const { Op } = require('sequelize')
 
 const response = require('../helpers/response')
 const { sendMsg: sendSchema } = require('../helpers/validation')
-const { Op } = require('sequelize')
+const paging = require('../helpers/pagination')
 
 module.exports = {
   sendMsg: async (req, res) => {
@@ -32,12 +33,50 @@ module.exports = {
   getAll: async (req, res) => {
     try {
       const { id: userId } = req.user
+
       const search = await Messages.findAll({
         where: {
           [Op.or]: [{ senderId: userId }, { recipientId: userId }]
         }
       })
+
       return response(res, 'List of message', { data: search })
+    } catch (e) {
+      return response(res, e.message, {}, 500, false)
+    }
+  },
+  getMessage: async (req, res) => {
+    try {
+      const { id: userId } = req.user
+      const { id: friendId } = req.params
+
+      const count = await Messages.count({
+        where: {
+          senderId: {
+            [Op.or]: [userId, friendId]
+          },
+          recipientId: {
+            [Op.or]: [userId, friendId]
+          }
+        }
+      })
+
+      const { pageInfo, offset } = paging(req, count)
+
+      const search = await Messages.findAll({
+        where: {
+          senderId: {
+            [Op.or]: [userId, friendId]
+          },
+          recipientId: {
+            [Op.or]: [userId, friendId]
+          }
+        },
+        limit: pageInfo.limit,
+        offset
+      })
+
+      return response(res, 'List of message', { data: search, pageInfo })
     } catch (e) {
       return response(res, e.message, {}, 500, false)
     }

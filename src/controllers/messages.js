@@ -14,12 +14,28 @@ module.exports = {
       const find = await Users.findByPk(recipientId)
 
       if (find) {
-        const data = { senderId, recipientId, content }
+        const last = await Messages.update({ lastMsg: false }, {
+          where: {
+            senderId: {
+              [Op.or]: [senderId, recipientId]
+            },
+            recipientId: {
+              [Op.or]: [senderId, recipientId]
+            },
+            lastMsg: true
+          }
+        })
 
-        const create = await Messages.create(data)
+        if (last) {
+          const data = { senderId, recipientId, content }
 
-        if (create) {
-          return response(res, 'Send message successfully', { data: create })
+          const create = await Messages.create(data)
+
+          if (create) {
+            return response(res, 'Send message successfully', { data: create })
+          } else {
+            return response(res, 'Failed to send', {}, 400, false)
+          }
         } else {
           return response(res, 'Failed to send', {}, 400, false)
         }

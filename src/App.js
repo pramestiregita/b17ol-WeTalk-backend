@@ -10,9 +10,13 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(morgan('dev'))
 app.use(cors())
 
+const authMiddleware = require('./middlewares/auth')
+
+const authRoute = require('./routes/auth')
 const usersRoute = require('./routes/users')
 
-app.use('/user', usersRoute)
+app.use('/auth', authRoute)
+app.use('/user', authMiddleware, usersRoute)
 
 // provide static files
 app.use('/upload', express.static('assets/uploads/'))

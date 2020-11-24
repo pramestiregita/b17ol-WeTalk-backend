@@ -29,7 +29,7 @@ module.exports = {
       }
 
       if (id > 0) {
-        jwt.sign({ id }, SECRET_KEY, { expiresIn: '10 m' }, (err, token) => {
+        jwt.sign({ id }, SECRET_KEY, { expiresIn: '10 h' }, (err, token) => {
           if (err) {
             return response(res, err.message, {}, 500, false)
           } else {

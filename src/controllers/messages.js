@@ -74,7 +74,7 @@ module.exports = {
       return response(res, e.message, {}, 500, false)
     }
   },
-  getMessage: async (req, res) => {
+  getMsg: async (req, res) => {
     try {
       const { id: userId } = req.user
       const { id: friendId } = req.params
@@ -109,6 +109,52 @@ module.exports = {
         })
 
         return response(res, 'List of message', { data: search, pageInfo })
+      }
+    } catch (e) {
+      return response(res, e.message, {}, 500, false)
+    }
+  },
+  deleteMsg: async (req, res) => {
+    try {
+      const { id } = req.params
+
+      const find = await Messages.findByPk(id)
+      let results = {}
+
+      if (find) {
+        const { senderId, recipientId, lastMsg } = find
+        if (lastMsg) {
+          const findAll = await Messages.findOne({
+            where: {
+              senderId: {
+                [Op.or]: [senderId, recipientId]
+              },
+              recipientId: {
+                [Op.or]: [senderId, recipientId]
+              },
+              lastMsg: false
+            },
+            order: [['createdAt', 'DESC']]
+          })
+
+          const { id: lastId } = findAll
+          const lasted = await Messages.update({ lastMsg: true }, { where: { id: lastId } })
+
+          if (lasted) {
+            console.log(lasted)
+            results = await Messages.destroy({ where: { id } })
+          }
+        } else {
+          results = await Messages.destroy({ where: { id } })
+        }
+
+        if (results) {
+          return response(res, 'Delete message successfully', { data: results })
+        } else {
+          return response(res, 'Failed to delete', {}, 400, false)
+        }
+      } else {
+        return response(res, 'Message not found', {}, 404, false)
       }
     } catch (e) {
       return response(res, e.message, {}, 500, false)

@@ -1,7 +1,7 @@
 const multer = require('multer')
 const fs = require('fs')
 const path = require('path')
-const size = 2000
+const { LIMIT_FILE } = process.env
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: size,
+  limits: LIMIT_FILE,
   fileFilter: (req, file, cb) => {
     if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
       return cb(new Error('Only image files with extension jpeg/jpg/png are allowed!'), false)

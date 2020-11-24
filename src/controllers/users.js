@@ -15,15 +15,17 @@ module.exports = {
       const { phoneNumber } = await loginSchema.validate(req.body)
       const find = await Users.findAll({ where: { phoneNumber } })
       let id = 0
+
       if (!find.length) {
         const create = await Users.create({ phoneNumber })
+
         if (create) {
-          id = create.dataValues.id
+          id = create.id
         } else {
           return response(res, 'Failed to login', {}, 400, false)
         }
       } else {
-        id = find[0].dataValues.id
+        id = find[0].id
       }
 
       if (id > 0) {

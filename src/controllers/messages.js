@@ -67,7 +67,19 @@ module.exports = {
         },
         order: [['createdAt', 'DESC']],
         limit: pageInfo.limit,
-        offset
+        offset,
+        include: [
+          {
+            model: Users,
+            as: 'sender',
+            attributes: ['id', 'name']
+          },
+          {
+            model: Users,
+            as: 'recipient',
+            attributes: ['id', 'name']
+          }
+        ]
       })
 
       return response(res, 'List of message', { data: search, pageInfo })
@@ -106,7 +118,19 @@ module.exports = {
             }
           },
           limit: pageInfo.limit,
-          offset
+          offset,
+          include: [
+            {
+              model: Users,
+              as: 'sender',
+              attributes: ['id', 'name']
+            },
+            {
+              model: Users,
+              as: 'recipient',
+              attributes: ['id', 'name']
+            }
+          ]
         })
 
         return response(res, 'List of message', { data: search, pageInfo })
@@ -142,7 +166,6 @@ module.exports = {
           const lasted = await Messages.update({ lastMsg: true }, { where: { id: lastId } })
 
           if (lasted) {
-            console.log(lasted)
             results = await Messages.destroy({ where: { id } })
           }
         } else {
@@ -150,7 +173,7 @@ module.exports = {
         }
 
         if (results) {
-          return response(res, 'Delete message successfully', { data: results })
+          return response(res, 'Delete message successfully')
         } else {
           return response(res, 'Failed to delete', {}, 400, false)
         }

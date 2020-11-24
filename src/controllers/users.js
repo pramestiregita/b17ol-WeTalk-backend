@@ -41,6 +41,21 @@ module.exports = {
       return response(res, e.message, {}, 500, false)
     }
   },
+  getProfile: async (req, res) => {
+    try {
+      const { id } = req.user
+
+      const results = await Users.findByPk(id)
+
+      if (results) {
+        return response(res, 'Detail user', { data: results })
+      } else {
+        return response(res, 'User not found', {}, 404, false)
+      }
+    } catch (e) {
+      return response(res, e.message, {}, 500, false)
+    }
+  },
   setProfile: async (req, res) => {
     upload(req, res, async (err) => {
       let picture = null

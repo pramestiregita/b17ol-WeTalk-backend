@@ -68,7 +68,7 @@ module.exports = {
 
         const { id } = req.user
         const { name } = await setProfile.validate(req.body)
-        let avatar = null
+        let avatar
 
         if (req.file) {
           picture = req.file

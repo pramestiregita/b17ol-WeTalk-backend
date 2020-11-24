@@ -8,7 +8,6 @@ module.exports = {
     name: yup.string().required('Please insert name!')
   }),
   sendMsg: yup.object().shape({
-    recipientId: yup.number().typeError('Please insert recipientId').required('Please insert recipientId'),
     content: yup.string().required('Please insert a content')
   })
 }

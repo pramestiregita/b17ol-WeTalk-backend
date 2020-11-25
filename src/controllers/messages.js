@@ -72,12 +72,12 @@ module.exports = {
           {
             model: Users,
             as: 'sender',
-            attributes: ['id', 'name']
+            attributes: ['id', 'name', 'avatar']
           },
           {
             model: Users,
             as: 'recipient',
-            attributes: ['id', 'name']
+            attributes: ['id', 'name', 'avatar']
           }
         ]
       })

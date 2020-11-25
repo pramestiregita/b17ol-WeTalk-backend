@@ -83,7 +83,7 @@ module.exports = {
         attributes: {
           include: [
             [
-              sequelize.literal('(SELECT SUBSTRING(content,1,100) AS summary from Messages)')
+              sequelize.literal('(SELECT SUBSTRING(content,1,100) AS summary from Messages)'), 'preview'
             ]
           ]
         }

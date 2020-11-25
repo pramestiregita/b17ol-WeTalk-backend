@@ -132,5 +132,20 @@ module.exports = {
         return response(res, e.message, {}, 500, false)
       }
     })
+  },
+  getFriend: async (req, res) => {
+    try {
+      const { id } = req.params
+
+      const find = await Users.findByPk(id, { attributes: { exclude: ['email'] } })
+
+      if (find) {
+        return response(res, 'Detail friend', { data: find })
+      } else {
+        return response(res, 'User not found', {}, 404, false)
+      }
+    } catch (e) {
+      return response(res, e.message, {}, 500, false)
+    }
   }
 }

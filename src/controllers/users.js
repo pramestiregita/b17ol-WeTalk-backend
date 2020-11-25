@@ -6,6 +6,7 @@ const upload = require('../helpers/uploadAvatar').single('avatar')
 const multer = require('multer')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
+const { Op } = require('sequelize')
 
 const { SECRET_KEY } = process.env
 
@@ -144,6 +145,23 @@ module.exports = {
       } else {
         return response(res, 'User not found', {}, 404, false)
       }
+    } catch (e) {
+      return response(res, e.message, {}, 500, false)
+    }
+  },
+  getFriends: async (req, res) => {
+    try {
+      const { id } = req.user
+
+      const results = await Users.findAll({
+        where: {
+          id: {
+            [Op.notlike]: id
+          }
+        }
+      })
+
+      return response(res, 'My contact', { data: results })
     } catch (e) {
       return response(res, e.message, {}, 500, false)
     }

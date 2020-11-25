@@ -152,7 +152,7 @@ module.exports = {
   getFriends: async (req, res) => {
     try {
       const { id } = req.user
-      const { search } = req.query
+      const { search = '' } = req.query
 
       const results = await Users.findAll({
         where: {

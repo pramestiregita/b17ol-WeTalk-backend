@@ -152,11 +152,15 @@ module.exports = {
   getFriends: async (req, res) => {
     try {
       const { id } = req.user
+      const { search } = req.query
 
       const results = await Users.findAll({
         where: {
           id: {
             [Op.not]: id
+          },
+          name: {
+            [Op.substring]: search
           }
         }
       })

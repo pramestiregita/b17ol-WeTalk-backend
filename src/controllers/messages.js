@@ -60,7 +60,7 @@ module.exports = {
 
       const { pageInfo, offset } = paging(req, count)
 
-      const search = await Messages.findAll({
+      const results = await Messages.findAll({
         where: {
           [Op.or]: [{ senderId: userId }, { recipientId: userId }],
           lastMsg: true
@@ -89,7 +89,7 @@ module.exports = {
         }
       })
 
-      return response(res, 'List of message', { data: search, pageInfo })
+      return response(res, 'List of message', { data: results, pageInfo })
     } catch (e) {
       return response(res, e.message, {}, 500, false)
     }

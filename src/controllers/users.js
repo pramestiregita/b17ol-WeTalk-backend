@@ -94,5 +94,43 @@ module.exports = {
         return response(res, e.message, {}, 500, false)
       }
     })
+  },
+  updateAva: async (req, res) => {
+    upload(req, res, async (err) => {
+      let picture = null
+      try {
+        if (err instanceof multer.MulterError) {
+          return response(res, err.message, {}, 500, false)
+        } else if (err) {
+          return response(res, err.message, {}, 500, false)
+        }
+
+        const { id } = req.user
+        let avatar
+
+        if (req.file) {
+          picture = req.file
+          avatar = 'upload/' + req.file.filename
+        }
+
+        const data = { avatar }
+
+        const create = await Users.update(data, { where: { id } })
+
+        if (create.length) {
+          return response(res, 'Update profile successfully', { data })
+        } else {
+          return response(res, 'Failed to set profile', {}, 400, false)
+        }
+      } catch (e) {
+        picture && fs.unlink(picture.path, (err) => {
+          if (err) {
+            return response(res, err.message, {}, 500, false)
+          }
+        })
+
+        return response(res, e.message, {}, 500, false)
+      }
+    })
   }
 }

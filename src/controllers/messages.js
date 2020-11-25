@@ -117,18 +117,19 @@ module.exports = {
               [Op.or]: [userId, friendId]
             }
           },
+          order: [['createdAt', 'DESC']],
           limit: pageInfo.limit,
           offset,
           include: [
             {
               model: Users,
               as: 'sender',
-              attributes: ['id', 'name']
+              attributes: ['id', 'name', 'avatar']
             },
             {
               model: Users,
               as: 'recipient',
-              attributes: ['id', 'name']
+              attributes: ['id', 'name', 'avatar']
             }
           ]
         })

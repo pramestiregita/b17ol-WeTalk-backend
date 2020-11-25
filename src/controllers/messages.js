@@ -1,4 +1,4 @@
-const { Messages, Users } = require('../models')
+const { Messages, Users, sequelize } = require('../models')
 const { Op } = require('sequelize')
 
 const response = require('../helpers/response')
@@ -79,7 +79,14 @@ module.exports = {
             as: 'recipient',
             attributes: ['id', 'name', 'avatar']
           }
-        ]
+        ],
+        attributes: {
+          include: [
+            [
+              sequelize.literal('(SELECT SUBSTRING(content,1,100) AS summary from Messages)')
+            ]
+          ]
+        }
       })
 
       return response(res, 'List of message', { data: search, pageInfo })

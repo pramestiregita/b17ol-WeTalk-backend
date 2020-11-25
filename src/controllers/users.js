@@ -7,6 +7,7 @@ const multer = require('multer')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
+const pagination = require('../helpers/pagination')
 
 const { SECRET_KEY } = process.env
 
@@ -154,7 +155,7 @@ module.exports = {
       const { id } = req.user
       const { search = '' } = req.query
 
-      const results = await Users.findAll({
+      const count = await Users.count({
         where: {
           id: {
             [Op.not]: id
@@ -165,7 +166,22 @@ module.exports = {
         }
       })
 
-      return response(res, 'My contact', { data: results })
+      const { pageInfo, offset } = pagination(req, count)
+
+      const results = await Users.findAll({
+        where: {
+          id: {
+            [Op.not]: id
+          },
+          name: {
+            [Op.substring]: search
+          }
+        },
+        limit: pageInfo.limit,
+        offset
+      })
+
+      return response(res, 'My contact', { data: results, pageInfo })
     } catch (e) {
       return response(res, e.message, {}, 500, false)
     }

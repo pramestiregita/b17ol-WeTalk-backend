@@ -156,7 +156,7 @@ module.exports = {
       const results = await Users.findAll({
         where: {
           id: {
-            [Op.notlike]: id
+            [Op.not]: id
           }
         }
       })

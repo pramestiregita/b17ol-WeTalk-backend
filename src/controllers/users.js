@@ -177,6 +177,7 @@ module.exports = {
             [Op.substring]: search
           }
         },
+        order: [['name', 'ASC']],
         limit: pageInfo.limit,
         offset
       })

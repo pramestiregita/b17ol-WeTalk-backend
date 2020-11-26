@@ -10,8 +10,7 @@ module.exports = {
   sendMsg: async (req, res) => {
     try {
       const { id: senderId } = req.user
-      let { id: recipientId } = req.params
-      recipientId = parseInt(recipientId)
+      const { id: recipientId } = req.params
       const { content } = await sendSchema.validate(req.body)
 
       const find = await Users.findByPk(recipientId)

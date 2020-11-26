@@ -83,7 +83,7 @@ module.exports = {
         attributes: {
           include: [
             [
-              sequelize.literal('(SELECT CONCAT(SUBSTRING(content,1,40), "...") AS summary)'), 'preview'
+              sequelize.literal('(SELECT CONCAT(SUBSTRING(content,1,35), "...") AS summary)'), 'preview'
             ]
           ]
         }

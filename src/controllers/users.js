@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
 const pagination = require('../helpers/pagination')
 
-const { SECRET_KEY } = process.env
+const { SECRET_KEY, TOKEN_EXP } = process.env
 
 module.exports = {
   login: async (req, res) => {
@@ -31,7 +31,7 @@ module.exports = {
       }
 
       if (id > 0) {
-        jwt.sign({ id }, SECRET_KEY, { expiresIn: '10 h' }, (err, token) => {
+        jwt.sign({ id }, SECRET_KEY, { expiresIn: TOKEN_EXP }, (err, token) => {
           if (err) {
             return response(res, err.message, {}, 500, false)
           } else {

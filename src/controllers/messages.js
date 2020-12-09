@@ -99,8 +99,7 @@ module.exports = {
           recipientId: userId,
           isRead: false
         },
-        group: ['recipientId'],
-        attributes: ['senderId']
+        group: ['senderId']
       })
 
       return response(res, 'List of message', { pageInfo, unread, data: results })

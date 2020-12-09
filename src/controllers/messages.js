@@ -10,10 +10,13 @@ module.exports = {
   sendMsg: async (req, res) => {
     try {
       const { id: senderId } = req.user
-      const { id: recipientId } = req.params
+      let { id: recipientId } = req.params
+      recipientId = parseInt(recipientId)
       const { content } = await sendSchema.validate(req.body)
 
       const find = await Users.findByPk(recipientId)
+
+      if (senderId === recipientId) return response(res, 'Error', {}, 400, false)
 
       if (find) {
         const last = await Messages.update({ lastMsg: false }, {
@@ -86,16 +89,23 @@ module.exports = {
           include: [
             [
               sequelize.literal('(SELECT IF(LENGTH(content)>30, CONCAT(SUBSTRING(content,1,35), "..."), null))'), 'preview'
-            ],
-            [
-              sequelize.literal('(SELECT COUNT(*) FROM Messages WHERE isRead=false)'), 'new'
             ]
           ]
         }
       })
 
-      return response(res, 'List of message', { pageInfo, data: results })
+      const unread = await Messages.count({
+        where: {
+          recipientId: userId,
+          isRead: false
+        },
+        group: ['recipientId'],
+        attributes: ['senderId']
+      })
+
+      return response(res, 'List of message', { pageInfo, unread, data: results })
     } catch (e) {
+      console.log(e)
       return response(res, e.message, {}, 500, false)
     }
   },
@@ -122,12 +132,9 @@ module.exports = {
 
         await Messages.update({ isRead: true }, {
           where: {
-            senderId: {
-              [Op.or]: [userId, friendId]
-            },
-            recipientId: {
-              [Op.or]: [userId, friendId]
-            }
+            senderId: friendId,
+            recipientId: userId,
+            isRead: false
           }
         })
 

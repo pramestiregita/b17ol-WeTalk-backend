@@ -85,13 +85,16 @@ module.exports = {
         attributes: {
           include: [
             [
-              sequelize.literal('(SELECT CONCAT(SUBSTRING(content,1,35), "...") AS summary)'), 'preview'
+              sequelize.literal('(SELECT IF(LENGTH(content)>30, CONCAT(SUBSTRING(content,1,35), "..."), null))'), 'preview'
+            ],
+            [
+              sequelize.literal('(SELECT COUNT(*) FROM Messages WHERE isRead=false)'), 'new'
             ]
           ]
         }
       })
 
-      return response(res, 'List of message', { data: results, pageInfo })
+      return response(res, 'List of message', { pageInfo, data: results })
     } catch (e) {
       return response(res, e.message, {}, 500, false)
     }
@@ -116,6 +119,17 @@ module.exports = {
         })
 
         const { pageInfo, offset } = paging(req, count)
+
+        await Messages.update({ isRead: true }, {
+          where: {
+            senderId: {
+              [Op.or]: [userId, friendId]
+            },
+            recipientId: {
+              [Op.or]: [userId, friendId]
+            }
+          }
+        })
 
         const search = await Messages.findAll({
           where: {
@@ -143,7 +157,7 @@ module.exports = {
           ]
         })
 
-        return response(res, 'List of message', { data: search, pageInfo })
+        return response(res, 'List of message', { pageInfo, data: search })
       }
     } catch (e) {
       return response(res, e.message, {}, 500, false)

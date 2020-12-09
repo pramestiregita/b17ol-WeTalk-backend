@@ -1,6 +1,7 @@
 const route = require('express').Router()
-const usersControllers = require('../controllers/users')
+const authControllers = require('../controllers/auth')
 
-route.post('/login', usersControllers.login)
+route.post('/login', authControllers.login)
+route.post('/refresh-token', authControllers.reLogin)
 
 module.exports = route

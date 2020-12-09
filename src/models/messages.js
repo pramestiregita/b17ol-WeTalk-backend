@@ -37,7 +37,8 @@ module.exports = (sequelize, DataTypes) => {
         notNull: 'Please insert content!'
       }
     },
-    lastMsg: DataTypes.BOOLEAN
+    lastMsg: DataTypes.BOOLEAN,
+    isRead: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Messages'

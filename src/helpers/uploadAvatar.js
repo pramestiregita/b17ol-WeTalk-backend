@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
     cb(null, dir)
   },
   filename: (req, file, cb) => {
-    cb(null, 'avatar-' + Date.now() + path.extname(file.originalname))
+    cb(null, 'avatar-user' + req.user.id + '-' + Date.now() + path.extname(file.originalname))
   }
 })
 
@@ -28,4 +28,4 @@ const upload = multer({
   }
 })
 
-module.exports = upload
+module.exports = upload.single('avatar')

@@ -3,9 +3,9 @@ const response = require('../helpers/response')
 const { SECRET_KEY, REFRESH_KEY, SECRET_TOKEN_EXP, REFRESH_TOKEN_EXP } = process.env
 
 module.exports = {
-  signAccessToken: (userId) => {
+  signAccessToken: (id) => {
     return new Promise((resolve, reject) => {
-      const payload = { userId }
+      const payload = { id }
       const secret = SECRET_KEY
       const option = { expiresIn: SECRET_TOKEN_EXP }
 
@@ -32,9 +32,9 @@ module.exports = {
       return response(res, 'Forbidden Access', {}, 403, false)
     }
   },
-  signRefreshToken: (userId) => {
+  signRefreshToken: (id) => {
     return new Promise((resolve, reject) => {
-      const payload = { userId }
+      const payload = { id }
       const secret = REFRESH_KEY
       const option = { expiresIn: REFRESH_TOKEN_EXP }
 
@@ -50,8 +50,8 @@ module.exports = {
       jwt.verify(refreshToken, REFRESH_KEY, (err, payload) => {
         if (err) return reject(new Error('Unauthorized'))
 
-        const userId = payload.id
-        resolve(userId)
+        const id = payload.id
+        resolve(id)
       })
     })
   }

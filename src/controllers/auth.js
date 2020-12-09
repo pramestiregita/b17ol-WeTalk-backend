@@ -8,24 +8,11 @@ module.exports = {
   login: async (req, res) => {
     try {
       const { phoneNumber } = await loginSchema.validate(req.body)
-      const find = await Users.findOne({ where: { phoneNumber } })
-      let id = 0
+      const [find, created] = await Users.findOrCreate({ where: { phoneNumber } })
 
-      if (!find) {
-        const create = await Users.create({ phoneNumber })
-
-        if (create) {
-          id = create.id
-        } else {
-          return response(res, 'Failed to login', {}, 400, false)
-        }
-      } else {
-        id = find.id
-      }
-
-      if (id > 0) {
-        const token = await signAccessToken(id)
-        const refreshToken = await signRefreshToken(id)
+      if (find || created) {
+        const token = await signAccessToken(find.id)
+        const refreshToken = await signRefreshToken(find.id)
 
         return response(res, 'Login succesfully', { token, refreshToken })
       }

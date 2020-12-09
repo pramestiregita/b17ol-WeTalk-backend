@@ -37,7 +37,7 @@ module.exports = {
           const create = await Messages.create(data)
 
           if (create) {
-            io.emit(recipientId, { senderId, message: content })
+            io.emit(recipientId.toString(), { senderId, message: content })
             return response(res, 'Send message successfully', { data: create })
           } else {
             return response(res, 'Failed to send', {}, 400, false)
@@ -162,6 +162,8 @@ module.exports = {
             }
           ]
         })
+
+        io.emit(userId.toString(), { friendId })
 
         return response(res, 'List of message', { pageInfo, data: search })
       }

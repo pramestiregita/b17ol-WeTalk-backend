@@ -1,3 +1,4 @@
 node_modules
 .env
 assets/uploads
+src/config/wetalk-8b1a6-firebase-adminsdk-pxafg-f575eecfc0.json

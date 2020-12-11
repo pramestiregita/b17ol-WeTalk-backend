@@ -4,6 +4,7 @@ const { Op } = require('sequelize')
 const response = require('../helpers/response')
 const { sendMsg: sendSchema } = require('../helpers/validation')
 const paging = require('../helpers/pagination')
+const admin = require('../helpers/firebase')
 const io = require('../App')
 
 module.exports = {
@@ -32,16 +33,27 @@ module.exports = {
         })
 
         if (last) {
-          const data = { senderId, recipientId, content }
+          const { name, deviceToken } = await Users.findByPk(senderId)
 
-          const create = await Messages.create(data)
+          console.log(name, deviceToken)
 
-          if (create) {
-            io.emit(recipientId.toString(), { senderId, message: content })
-            return response(res, 'Send message successfully', { data: create })
-          } else {
-            return response(res, 'Failed to send', {}, 400, false)
-          }
+          // const data = { senderId, recipientId, content }
+
+          // const create = await Messages.create(data)
+
+          // if (create) {
+          //   admin.messaging().send({
+          //     token: 'c_uWIGOHR-6RW5OmTwWDHO:APA91bG85yxMvt__tIVAr8xhgFupFrT1urYF2wF-c4Kooit8TA8OgoE7QxcK5T1aemewB8d7fQo_96YwCe5UFJoArZhQ4rhfWZVoX2JhxICc65GCAqFdaz0ACXIhW_-TZZjv3Xxnzg2T',
+          //     notification: {
+          //       title: senderId.toString(),
+          //       body: content
+          //     }
+          //   })
+          //   io.emit(recipientId.toString(), { senderId, message: content })
+          //   return response(res, 'Send message successfully', { data: create })
+          // } else {
+          //   return response(res, 'Failed to send', {}, 400, false)
+          // }
         } else {
           return response(res, 'Failed to send', {}, 400, false)
         }

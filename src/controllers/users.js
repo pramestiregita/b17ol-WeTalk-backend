@@ -1,7 +1,7 @@
 const { Users } = require('../models')
 
 const response = require('../helpers/response')
-const { setProfile } = require('../helpers/validation')
+const { setProfile, addToken } = require('../helpers/validation')
 const pagination = require('../helpers/pagination')
 const upload = require('../helpers/uploadAvatar')
 
@@ -128,6 +128,30 @@ module.exports = {
       })
 
       return response(res, 'My contact', { pageInfo, data: results })
+    } catch (e) {
+      return response(res, e.message, {}, 500, false)
+    }
+  },
+  addDeviceToken: async (req, res) => {
+    try {
+      const { id } = req.user
+      const { token } = await addToken.validate(req.body)
+
+      const find = await Users.findByPk(id)
+
+      if (find) {
+        const add = await Users.update({ deviceToken: token }, {
+          where: { id }
+        })
+
+        if (add) {
+          return response(res, 'Add device token successfully', { deviceToken: token })
+        } else {
+          return response(res, 'Failed to add device token', {}, 400, false)
+        }
+      } else {
+        return response(res, 'User not found', {}, 404, false)
+      }
     } catch (e) {
       return response(res, e.message, {}, 500, false)
     }

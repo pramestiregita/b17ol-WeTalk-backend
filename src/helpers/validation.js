@@ -13,5 +13,8 @@ module.exports = {
   }),
   sendMsg: yup.object().shape({
     content: yup.string().required('Please insert a message!')
+  }),
+  addToken: yup.object().shape({
+    token: yup.string().required('Please insert token!')
   })
 }

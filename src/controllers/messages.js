@@ -167,7 +167,7 @@ module.exports = {
           ]
         })
 
-        io.emit(userId.toString())
+        io.emit('read' + friendId.toString())
 
         return response(res, 'List of message', { pageInfo, data: search })
       }

@@ -38,7 +38,8 @@ module.exports = {
           const create = await Messages.create(data)
 
           if (create) {
-            const { name, deviceToken } = await Users.findByPk(senderId)
+            const { name } = await Users.findByPk(senderId)
+            const { deviceToken } = await Users.findByPk(recipientId)
 
             notification(deviceToken, name, content)
 

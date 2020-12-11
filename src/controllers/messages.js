@@ -98,13 +98,11 @@ module.exports = {
         where: {
           recipientId: userId,
           isRead: false
-        },
-        group: ['senderId']
+        }
       })
 
       return response(res, 'List of message', { pageInfo, unread, data: results })
     } catch (e) {
-      console.log(e)
       return response(res, e.message, {}, 500, false)
     }
   },
@@ -163,7 +161,7 @@ module.exports = {
           ]
         })
 
-        io.emit(userId.toString(), { friendId })
+        io.emit(userId.toString())
 
         return response(res, 'List of message', { pageInfo, data: search })
       }

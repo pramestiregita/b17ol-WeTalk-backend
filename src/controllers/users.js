@@ -155,5 +155,28 @@ module.exports = {
     } catch (e) {
       return response(res, e.message, {}, 500, false)
     }
+  },
+  deleteDeviceToken: async (req, res) => {
+    try {
+      const { id } = req.user
+
+      const find = await Users.findByPk(id)
+
+      if (find) {
+        const add = await Users.update({ deviceToken: null }, {
+          where: { id }
+        })
+
+        if (add) {
+          return response(res, 'Delete device token successfully')
+        } else {
+          return response(res, 'Failed to add device token', {}, 400, false)
+        }
+      } else {
+        return response(res, 'User not found', {}, 404, false)
+      }
+    } catch (e) {
+      return response(res, e.message, {}, 500, false)
+    }
   }
 }

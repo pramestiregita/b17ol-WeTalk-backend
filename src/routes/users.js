@@ -7,5 +7,6 @@ route.get('/friend/profile/:id', usersControllers.getFriend)
 route.patch('/set-profile', usersControllers.updateData)
 route.patch('/update-ava', usersControllers.updateAva)
 route.patch('/add-device-token', usersControllers.addDeviceToken)
+route.patch('/delete-device-token', usersControllers.deleteDeviceToken)
 
 module.exports = route

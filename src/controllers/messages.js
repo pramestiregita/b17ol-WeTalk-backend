@@ -92,11 +92,14 @@ module.exports = {
           }
         ],
         attributes: {
-          include: [
-            [
-              sequelize.literal('(SELECT IF(LENGTH(content)>30, CONCAT(SUBSTRING(content,1,35), "..."), null))'), 'preview'
-            ]
-          ]
+          include: [[sequelize.literal(`(
+            SELECT IF(
+              LENGTH(content)>30,
+              CONCAT(
+                SUBSTRING(content,1,35),
+                "..."), 
+                null)
+            )`), 'preview']]
         }
       })
 

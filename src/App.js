@@ -33,6 +33,10 @@ app.get('/', (req, res) => {
   })
 })
 
+io.on('connection', socket => {
+  console.log('a user connected to our socket', socket)
+})
+
 server.listen(APP_PORT, () => {
   console.log(`App listening to port ${APP_PORT}`)
 })

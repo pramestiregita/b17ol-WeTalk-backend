@@ -3,12 +3,12 @@
 Sistem aplikasi untuk melakukan proses pengiriman pesan secara real-time
 
 ## **Persyaratan Aplikasi Backend**
----
+
 1. Node v12.18.3
 2. PM2 v4.5.1
 
 ## **Instalasi**
----
+
 1. Clone repo https://github.com/pramestiregita/b17ol-WeTalk-backend.git
 2. Masuk ke direktori hasil clone
 3. Jalankan `npm install`
@@ -20,14 +20,14 @@ Sistem aplikasi untuk melakukan proses pengiriman pesan secara real-time
    - `pm2 logs wetalk` : untuk melihat console
 
 ## **Instalasi Database**
----
+
 1. Buka file `database.json`
 2. Ganti `username` dan `password` sesuai dengan username dan password dari database anda
 3. Jalankan `npx sequelize-cli db:create` untuk membuat database baru
 4. Kemudian jalankan `npx sequelize-cli db:migrate` untuk memigrasi tabel yang dibutuhkan 
 
 ## **Dokumentasi API**
----
+
 1. Masuk ke folder `documentation`
 2. Import file `WeTalk.postman_collection.json` ke dalam Postman
 3. Pastikan Anda menggunakan Postman tipe desktop dengan versi terbaru
